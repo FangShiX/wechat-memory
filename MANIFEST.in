@@ -1,0 +1,9 @@
+include README.md LICENSE
+recursive-include wechat_memory *.py
+prune .private
+prune data
+prune outputs
+prune tests
+prune examples
+global-exclude *.pyc
+

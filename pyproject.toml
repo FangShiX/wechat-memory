@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wechat-memory"
+version = "1.0.0"
+description = "Local-first WeChat export analysis, conversation timelines and evidence-grounded search"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{name = "FangShiX"}]
+dependencies = ["tzdata>=2024.1; sys_platform == 'win32'"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.urls]
+Homepage = "https://github.com/FangShiX/wechat-memory"
+Issues = "https://github.com/FangShiX/wechat-memory/issues"
+
+[project.scripts]
+wechat-memory = "wechat_memory.cli:main"
+
+[tool.setuptools]
+packages = ["wechat_memory"]
+

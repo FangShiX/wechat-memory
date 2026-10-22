@@ -1,0 +1,7 @@
+{"_type":"header","description":"Entirely fictional demonstration; no real conversations."}
+{"_type":"message","platformMessageId":"demo-1","timestamp":"2025-01-10 09:00:00","chat_id":"demo-reading","sender":"reader-a","content":"这周读书讨论的主题是城市交通。可以比较公共交通和自行车出行。"}
+{"_type":"message","platformMessageId":"demo-2","timestamp":"2025-01-10 09:03:00","chat_id":"demo-reading","sender":"reader-b","content":"公共交通的覆盖范围值得研究，我整理一份公开资料。"}
+{"_type":"message","platformMessageId":"demo-3","timestamp":"2025-04-12 10:00:00","chat_id":"demo-reading","sender":"reader-a","content":"城市交通的讨论继续，这次比较公交线路和步行距离。"}
+{"_type":"message","platformMessageId":"demo-4","timestamp":"2025-04-12 10:05:00","chat_id":"demo-reading","sender":"reader-b","content":"公共交通的调查结果应当先检查样本量，不能直接得出普遍结论。"}
+{"_type":"message","platformMessageId":"demo-1","timestamp":"2025-04-12 10:01:00","chat_id":"demo-garden","sender":"gardener-a","content":"周末园艺活动安排在周六，我们准备花盆和种子。"}
+{"_type":"message","platformMessageId":"demo-2","timestamp":"2025-04-12 10:06:00","chat_id":"demo-garden","sender":"gardener-b","content":"[图片]","type":3}

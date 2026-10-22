@@ -1,0 +1,20 @@
+# Private inputs, exports, databases and generated analysis must never be committed.
+*
+!/.gitignore
+!/.gitattributes
+!/README.md
+!/LICENSE
+!/pyproject.toml
+!/MANIFEST.in
+!/wechat_memory/
+!/wechat_memory/*.py
+!/tests/
+!/tests/*.py
+!/examples/
+!/examples/demo.jsonl
+!/.github/
+!/.github/workflows/
+!/.github/workflows/ci.yml
+__pycache__/
+*.pyc
+
