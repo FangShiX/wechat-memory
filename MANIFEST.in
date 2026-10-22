@@ -6,4 +6,3 @@ prune outputs
 prune tests
 prune examples
 global-exclude *.pyc
-

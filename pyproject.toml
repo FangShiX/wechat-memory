@@ -22,4 +22,3 @@ wechat-memory = "wechat_memory.cli:main"
 
 [tool.setuptools]
 packages = ["wechat_memory"]
-
