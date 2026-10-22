@@ -22,6 +22,13 @@ from wechat_memory.importers import import_messages
 DEMO = Path(__file__).resolve().parents[1] / "examples" / "demo.jsonl"
 
 
+def model_environment(values):
+    # Preserve SystemRoot and other OS/runtime variables needed by Windows TLS.
+    # Only model settings are isolated; no real API credentials enter test requests.
+    clean = {key: "" for key in ("OPENAI_MODEL", "OPENAI_BASE_URL", "OPENAI_API_KEY")}
+    return patch.dict(os.environ, {**clean, **values})
+
+
 class PipelineTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -144,11 +151,11 @@ class AITests(unittest.TestCase):
                 ai.validate_reply({**self.good, **change}, self.messages)
 
     def test_opt_in_configuration_and_insecure_endpoint(self):
-        with patch.dict(os.environ, {}, clear=True), self.assertRaises(ai.AIError):
+        with model_environment({}), self.assertRaises(ai.AIError):
             ai.configuration()
-        with patch.dict(os.environ, {"OPENAI_MODEL": "local", "OPENAI_BASE_URL": "http://localhost:8080/v1"}, clear=True):
+        with model_environment({"OPENAI_MODEL": "local", "OPENAI_BASE_URL": "http://localhost:8080/v1"}):
             self.assertEqual(ai.configuration()[2], "local")
-        with patch.dict(os.environ, {"OPENAI_MODEL": "x", "OPENAI_API_KEY": "SECRET", "OPENAI_BASE_URL": "http://example.com/v1"}, clear=True):
+        with model_environment({"OPENAI_MODEL": "x", "OPENAI_API_KEY": "SECRET", "OPENAI_BASE_URL": "http://example.com/v1"}):
             with self.assertRaises(ai.AIError):
                 ai.configuration()
 
@@ -159,7 +166,7 @@ class AITests(unittest.TestCase):
             self.assertNotIn("source_file", req.data.decode())
             self.assertEqual(timeout, 60)
             return io.BytesIO(response)
-        with patch.dict(os.environ, {"OPENAI_MODEL": "local", "OPENAI_BASE_URL": "http://localhost:8080/v1"}, clear=True):
+        with model_environment({"OPENAI_MODEL": "local", "OPENAI_BASE_URL": "http://localhost:8080/v1"}):
             with patch("urllib.request.OpenerDirector.open", side_effect=open_request):
                 result = ai.summarize(self.messages)
                 self.assertEqual(result["model"], "local")
@@ -169,7 +176,7 @@ class AITests(unittest.TestCase):
             ai.NoRedirect().redirect_request(None, None, 302, "redirect", {}, "https://other.example")
 
     def test_invalid_model_response_retries_and_fails(self):
-        with patch.dict(os.environ, {"OPENAI_MODEL": "local", "OPENAI_BASE_URL": "http://localhost:8080/v1"}, clear=True):
+        with model_environment({"OPENAI_MODEL": "local", "OPENAI_BASE_URL": "http://localhost:8080/v1"}):
             with patch("urllib.request.OpenerDirector.open", side_effect=lambda *a, **k: io.BytesIO(b"not json")) as mocked:
                 with self.assertRaises(ai.AIError):
                     ai.summarize(self.messages)
@@ -199,7 +206,7 @@ class AITests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as folder:
                 workspace = Path(folder) / "ai"
                 env = {"OPENAI_MODEL": "synthetic-local-test", "OPENAI_BASE_URL": f"http://127.0.0.1:{server.server_port}/v1"}
-                with patch.dict(os.environ, env, clear=True):
+                with model_environment(env):
                     run_pipeline(parser().parse_args(["run", str(DEMO), "--output", str(workspace), "--ai"]))
                     analysis = json.loads((workspace / "analysis.json").read_text(encoding="utf-8"))
                     self.assertEqual(len(analysis["annotations"]), 3)
